@@ -544,14 +544,14 @@ function rStart(){
      <div class="step"><b>Deel 2 · 12 minuten</b>Vier gebeurtenissen (1815, 1830, 1848, 1871). Hoe reageerden een liberaal, een conservatief en een nationalist? Max. 12 punten.</div>
    </div>
    <div class="row2">
-     <div><label class="f" for="nm">Je naam</label><input type="text" id="nm" value="${esc(S.name)}" placeholder="Voor- en achternaam" oninput="S.name=this.value;save()"></div>
+     <div><label class="f" for="nm">Je voornaam</label><input type="text" id="nm" value="${esc(S.name)}" placeholder="Alleen je voornaam" autocomplete="off" oninput="S.name=this.value;save()"></div>
      <div><label class="f" for="kl">Klas</label><input type="text" id="kl" value="${esc(S.klas)}" placeholder="bv. 6V2" oninput="S.klas=this.value;save()"></div>
    </div>
    <div class="actions"><button class="btn" onclick="startP1()">Start deel 1</button><span class="muted small">De timer begint zodra je op start klikt. Je voortgang wordt bewaard in deze browser.</span></div>
   </div>`;
 }
 function startP1(){
-  if(!S.name.trim()){toast("Vul eerst je naam in.");$("#nm").focus();return;}
+  if(!S.name.trim()){toast("Vul eerst je voornaam in.");$("#nm").focus();return;}
   S.t1=Date.now();go("mc");
 }
 
