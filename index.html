@@ -111,6 +111,20 @@ label.f{display:block;font-weight:600;margin:10px 0 4px}
 .st-liberaal{--sc:var(--lib)}.st-conservatief{--sc:var(--con)}.st-nationalist{--sc:var(--nat)}
 .ptop{display:flex;gap:10px;align-items:center}
 .mono{width:46px;height:46px;border-radius:50%;background:var(--sc);color:#fff;font-family:var(--serif);font-weight:700;font-size:17px;display:flex;align-items:center;justify-content:center;flex:none}
+.foto{width:66px;height:84px;object-fit:cover;object-position:center 20%;border-radius:8px;border:3px solid var(--sc);flex:none;cursor:zoom-in;background:#eee}
+/* geheime brief */
+.envelop{position:relative;max-width:520px;margin:18px auto 0;background:#efe3c8;border:1px solid #cdb88f;border-radius:8px;padding:34px 20px 20px;text-align:center;box-shadow:0 4px 14px rgba(80,50,10,.18)}
+.envelop:before{content:"";position:absolute;left:0;right:0;top:0;height:60px;background:linear-gradient(to bottom right,transparent 49.5%,#e2d2ad 50%) left/50% 100% no-repeat,linear-gradient(to bottom left,transparent 49.5%,#e2d2ad 50%) right/50% 100% no-repeat;border-radius:8px 8px 0 0}
+.envelop .lak{position:relative;width:74px;height:74px;margin:0 auto 10px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#c0392b,#6d0000 70%);color:#f3d9a4;font-family:var(--serif);font-weight:700;font-size:28px;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 8px rgba(109,0,0,.4)}
+.envelop.dicht .lak{filter:grayscale(.6);opacity:.75}
+.brief{background:#fbf5e6 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect width='4' height='4' fill='%23fbf5e6'/%3E%3Crect width='1' height='1' fill='%23f1e7cf'/%3E%3C/svg%3E");border:1px solid #d9c6a0;border-radius:4px;padding:26px 30px;font-family:var(--serif);font-size:17px;line-height:1.65;color:#2b1d12;box-shadow:0 6px 18px rgba(80,50,10,.18);margin-top:16px;animation:open .6s ease-out}
+.brief p{margin:0 0 12px}
+.brief .ondert{text-align:right;font-style:italic}
+@keyframes open{from{transform:scaleY(.2) translateY(-30px);opacity:0}to{transform:none;opacity:1}}
+.voorsp{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:8px;background:#fff}
+.voorsp .vt{flex:1;min-width:220px;font-family:var(--serif);font-style:italic}
+.voorsp.ok{border-color:var(--ok);background:var(--oksoft)}.voorsp.bad{border-color:var(--bad);background:var(--badsoft)}
+.voorsp .vfb{flex-basis:100%;font-size:14.5px}
 .pnaam{font-family:var(--serif);font-weight:700;font-size:17px;line-height:1.15}
 .pjaren{font-size:13px;color:var(--muted)}
 .badge{display:inline-block;color:#fff;background:var(--sc);border-radius:5px;padding:0 7px;font-size:12px;font-weight:700;margin-left:4px}
@@ -396,6 +410,41 @@ const EV = [
      crit:["Tevreden: Duitsland is één natiestaat (nationalistisch doel) en/of de burgerij profiteert van één markt en gelijke wetten (liberaal belang).","Ontevreden: de eenwording kwam van bovenaf; keizer en kanselier hebben de macht en het parlement heeft te weinig invloed (geen ministeriële verantwoordelijkheid)."]}}}
 ];
 
+/* ============ geheime brief (ontgrendeld bij ≥ BRIEF_GRENS punten in deel 2) ============ */
+const BRIEF_GRENS = 10;
+const BRIEF = [
+ "Mijn waarde vriend,",
+ "Dit schrijf ik u in vertrouwen; verbrand deze brief zodra u hem gelezen hebt.",
+ "Vijf jaar na het Congres slaap ik slecht. In Spanje en in Napels hebben opstandelingen hun koning gedwongen een grondwet te aanvaarden. De liberalen noemen dat vrijheid; ik noem het de eerste stap naar een nieuwe revolutie. Wie de koning vandaag aan een grondwet bindt, bindt hem morgen aan een parlement, en overmorgen aan de straat.",
+ "Nog meer verontrusten mij de studenten met hun zwart-rood-gouden vaandels. Zij zingen over één Duits vaderland, over taal, bloed en een gemeenschappelijk verleden. Begrijpt u wat dat betekent voor ons keizerrijk? Wij heersen over Duitsers, Hongaren, Italianen, Tsjechen en Polen. Als ieder volk een eigen staat eist, valt het huis Habsburg uiteen als een kaartenhuis.",
+ "Ik vrees nog meer. Dat het rijk van de Oranjes, dat wij als dam tegen Frankrijk hebben opgeworpen, scheurt langs de lijnen van taal en geloof. Dat de straten van onze eigen hoofdstad zich ooit tegen ons keren. En het ergste: dat op een dag een vorst zélf het vuur van de natie oppakt om er zijn eigen troon mee te verwarmen. Dan zijn de nationalisten geen rebellen meer, maar soldaten van een koning.",
+ "Zorg dat de censuur waakzaam blijft. Rust is het hoogste goed."
+];
+const VOORSP = [
+ {t:"Het rijk van de Oranjes scheurt langs de lijnen van taal en geloof.",uit:true,fb:"Uitgekomen: in 1830 maakte België zich los, met liberalen én katholieken samen tegen Willem I."},
+ {t:"De straten van zijn eigen hoofdstad keren zich tegen hem.",uit:true,fb:"Uitgekomen: in maart 1848 moest Metternich zelf uit Wenen vluchten."},
+ {t:"Het huis Habsburg valt uiteen als een kaartenhuis.",uit:false,fb:"Niet in deze periode: de opstanden van 1848 werden neergeslagen en Oostenrijk sloot in 1867 een compromis met Hongarije. Pas na de Eerste Wereldoorlog (1918) viel het rijk echt uiteen."},
+ {t:"Een vorst gebruikt zelf het vuur van de natie voor zijn eigen troon.",uit:true,fb:"Uitgekomen: Bismarck en de Pruisische koning Wilhelm I maakten in 1871 van het Duitse nationalisme een steunpilaar van de kroon."},
+ {t:"Een grondwet leidt via een parlement tot de heerschappij van de straat.",uit:false,fb:"Niet uitgekomen, in elk geval niet in Nederland: Willem II gaf in 1848 juist een grondwet om de straat vóór te zijn, en het censuskiesrecht hield het gewone volk buiten de macht."}
+];
+function deel2(){return EV.reduce((a,e)=>a+evPts(e),0);}
+function briefOpen(){return deel2()>=BRIEF_GRENS;}
+function rBrief(){
+  const b=S.brief,d=deel2();
+  if(!briefOpen())return `<div class="envelop dicht"><div class="lak">M</div><b style="font-family:var(--serif);font-size:18px">Geheime brief · verzegeld</b>
+    <p class="small muted" style="margin:6px 0 0">Ontgrendel je met minstens ${BRIEF_GRENS} van de 12 punten in deel 2. Jij had er ${d}. Het zegel blijft dicht.</p></div>`;
+  if(!b.open)return `<div class="envelop"><div class="lak">M</div><b style="font-family:var(--serif);font-size:18px">Je hebt een geheime brief ontgrendeld!</b>
+    <p class="small" style="margin:6px 0 12px">Een onderschepte brief uit Wenen, december 1820. Wat voorspelde de afzender over de toekomst van Europa?</p>
+    <button class="btn" onclick="S.brief.open=true;render()">Verbreek het zegel</button></div>`;
+  const n=VOORSP.filter((v,i)=>b.ans[i]!==undefined).length, g=VOORSP.filter((v,i)=>b.ans[i]===v.uit).length;
+  return `<div class="brief"><p style="text-align:right">Wenen, december 1820</p>${BRIEF.map(p=>`<p>${p}</p>`).join("")}<p class="ondert">Uw toegenegen, M.</p></div>
+   <p class="muted small" style="margin-top:6px">Let op: dit is een verzonnen brief, geschreven in de geest van Metternich. Wat hij over Spanje, Napels en de studenten schrijft, gebeurde wel echt (1819–1820).</p>
+   <div class="task" style="margin-top:12px"><h3>Kwamen de angsten van ‘M.’ uit?</h3><p class="small" style="margin-top:0">Je kent nu Europa tot 1871. Beoordeel elke vrees. Geen punten, wel de laatste check.</p>
+   ${VOORSP.map((v,i)=>{const a=b.ans[i];const st=a===undefined?"":(a===v.uit?"ok":"bad");
+     return `<div class="voorsp ${st}"><span class="vt">“${v.t}”</span>${a===undefined?`<button class="btn small" onclick="S.brief.ans[${i}]=true;render()">Uitgekomen</button><button class="btn small ghost" onclick="S.brief.ans[${i}]=false;render()">Niet uitgekomen</button>`:`<b>${a===v.uit?"✓":"✗"}</b><span class="vfb">${v.fb}</span>`}</div>`;}).join("")}
+   ${n===VOORSP.length?`<div class="expl"><b>${g} van ${VOORSP.length} goed.</b> Metternich zag de krachten van zijn tijd scherp. Maar hij onderschatte iets: conservatieven konden liberalisme en nationalisme ook <i>temmen en gebruiken</i>, zoals Willem II in 1848 en Bismarck in 1871 lieten zien.</div>`:""}</div>`;
+}
+
 /* ============ hulpfuncties ============ */
 const $ = s => document.querySelector(s);
 function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
@@ -412,9 +461,9 @@ function fresh(){
     dOrder:shuffle([0,1,2,3]),dil:null,dilChk:false,text:"",sub:false,checks:[false,false],conf:false};});
   return {name:"",klas:"",phase:"start",t1:null,t1end:null,t2:null,t2end:null,mcI:0,mcAns:{},mcDone:false,shuf,
     exam:{text:"",sub:false,checks:[false,false,false],conf:false},route:null,seq:[],si:0,ev,retry:{},
-    bonus:{ans:null,chk:false,skip:false,order:shuffle([0,1,2,3])},toast1:false,toast2:false};
+    bonus:{ans:null,chk:false,skip:false,order:shuffle([0,1,2,3])},brief:{open:false,ans:{}},toast1:false,toast2:false};
 }
-function load(){try{const s=JSON.parse(localStorage.getItem(KEY));return s&&s.shuf?s:null;}catch(e){return null;}}
+function load(){try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&s.shuf){s.brief=s.brief||{open:false,ans:{}};return s;}return null;}catch(e){return null;}}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
 let S = load() || fresh();
 let ui = {sel:null};
@@ -647,13 +696,18 @@ function rIntro(){
     <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
     ${timeline(null)}
     ${uitleg}
+    <div class="banner">✉️ <b>Geheime brief:</b> haal je in deel 2 minstens ${BRIEF_GRENS} van de 12 punten, dan verbreek je aan het eind het zegel van een onderschepte brief uit Wenen.</div>
     <div class="banner"><b>Steeds dezelfde vraag:</b> hoe reageert iemand <i>vanuit zijn stroming</i> op deze gebeurtenis? Kijk naar wat hij wil, wie zijn achterban is en waar hij bang voor is.</div>
     ${nextBtn("Naar 1815 →")}</div>`;
 }
 
 /* ---- gebeurtenis ---- */
+function foto(p){return `img/portret/${p.id}.${p.id==="arndt"?"gif":"jpg"}`;}
+function zoomFoto(eid,pid){const p=persona(evById(eid),pid);
+  openModal(`<div style="display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start"><img src="${foto(p)}" alt="Portret van ${p.naam}" style="width:260px;max-width:100%;border-radius:10px"><div style="flex:1;min-width:220px"><h2>${p.naam}</h2><p class="muted">${p.jaren} · ${STROM[p.s]}</p><p>${p.bio}</p><p class="muted small">Portret: Wikimedia Commons (publiek domein).</p></div></div>`);}
 function pCard(p,extra){
-  return `<div class="persona st-${p.s}"><div class="ptop"><div class="mono">${p.ini}</div><div><div class="pnaam">${p.naam}</div><div class="pjaren">${p.jaren}<span class="badge">${STROM[p.s]}</span></div></div></div><p class="pbio">${p.bio}</p>${extra||""}</div>`;
+  const eid=EV.find(e=>e.personas.includes(p)).id;
+  return `<div class="persona st-${p.s}"><div class="ptop"><img class="foto" src="${foto(p)}" alt="Portret van ${p.naam}" onclick="zoomFoto('${eid}','${p.id}')" onerror="this.outerHTML='<div class=mono>${p.ini}</div>'"><div><div class="pnaam">${p.naam}</div><div class="pjaren">${p.jaren}<span class="badge">${STROM[p.s]}</span></div></div></div><p class="pbio">${p.bio}</p>${extra||""}</div>`;
 }
 function krant(ev){
   return `<article class="krant"><div class="mast"><span class="naam">De Europeesche Courant</span><span>${ev.datum}</span></div><h2 class="kop">${ev.kop}</h2><p class="ctx">${ev.context}</p></article>`;
@@ -786,8 +840,10 @@ function rEnd(){
      <div class="big">${s.e} <span style="font-size:20px">van ${MAX_TOTAAL} punten</span></div>${s.b?`<div>+ ${s.b} bonuspunt</div>`:""}
      <div class="muted small">${ROUTE[S.route].naam} · deel 1: ${dur(S.t1,S.t1end)} · deel 2: ${dur(S.t2,S.t2end)}</div></div>
    <table class="sum" style="margin-top:16px">${rows.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("")}</table>
+   ${rBrief()}
    <div class="actions"><button class="btn" onclick="printDoc()">Opslaan als PDF / printen</button><button class="btn ghost" onclick="S.si--;render()">← Terug</button></div>
-   <p class="muted small">Kies bij printen als printer <b>‘Opslaan als PDF’</b> en lever het bestand in. In de PDF staan al je antwoorden, met wat goed en fout was.</p></div>`;
+   <p class="muted small">Kies bij printen als printer <b>‘Opslaan als PDF’</b> en lever het bestand in. In de PDF staan al je antwoorden, met wat goed en fout was.</p>
+   <p class="muted small">Portretten: Wikimedia Commons (publiek domein).</p></div>`;
 }
 
 /* ---- PDF ---- */
@@ -810,6 +866,8 @@ function printDoc(){
     h+=`</div>`;});
   const rk=Object.keys(S.retry);
   if(rk.length)h+=`<h2>Herkansingen (geen punten)</h2>`+rk.map(id=>`<div class="pq">${mark(mcOk(mcById(id),S.retry[id].ans))} ${mcById(id).q}</div>`).join("");
+  const bn=VOORSP.filter((v,i)=>S.brief.ans[i]!==undefined).length;
+  h+=`<h2>Geheime brief</h2><p>${briefOpen()?`Ontgrendeld (${deel2()} van 12 in deel 2).${bn?` Voorspellingen beoordeeld: ${VOORSP.filter((v,i)=>S.brief.ans[i]===v.uit).length} van ${bn} goed.`:" Nog niet geopend."}`:`Verzegeld gebleven (${deel2()} van 12 in deel 2; nodig: ${BRIEF_GRENS}).`}</p>`;
   if(S.route==="A")h+=`<h2>Bonusuitdaging</h2><p>${S.bonus.chk?`${mark(S.bonus.ans===0)} ${EV[3].B.dil.opts[S.bonus.ans]}`:"Niet gedaan."}</p>`;
   $("#printdoc").innerHTML=h;
   const t=document.title;document.title=`Dossier ${S.name} - Van Wenen tot Versailles`;
